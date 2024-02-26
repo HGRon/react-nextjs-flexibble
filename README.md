@@ -1,4 +1,8 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Flexibble - Developer Collaboration Platform
+
+Flexibble is a social hub for developers built with React, Next.js, and GraphBase. It allows developers to effortlessly share and explore projects, fostering collaboration within the coding community.
+
+This project was inspired by the tutorial [Building a Next.js App](https://www.youtube.com/watch?v=986hztrfaSQ).
 
 ## Getting Started
 
