@@ -1,4 +1,4 @@
-import { connector, graph, scalar  } from '@grafbase/sdk'
+import { config, connector, graph, scalar } from '@grafbase/sdk'
 
 const gph = graph.Standalone()
 
@@ -26,3 +26,12 @@ const user = gph.type('User', {
 });
 
 gph.datasource(pg);
+
+export default config({
+  graph: gph,
+  auth: {
+    rules: (rules) => {
+      rules.public()
+    },
+  },
+})
