@@ -1,40 +1,28 @@
-import { g, config, auth } from '@grafbase/sdk';
-import { Model } from '@grafbase/sdk/dist/src/model';
+import { connector, graph, scalar  } from '@grafbase/sdk'
 
-const User: Model = g.model('User', {
-  name: g.string().length({ min: 2, max: 100 }),
-  email: g.string().unique(),
-  avatarUrl: g.url(),
-  description: g.string().length({ min: 2, max: 1000 }).optional(),
-  githubUrl: g.url().optional(),
-  linkedinUrl: g.url().optional(),
-  projects: g.relation(() => Project).list().optional(),
-}).auth((rules) => {
-  rules.public().read()
-})
+const gph = graph.Standalone()
 
-const Project: Model = g.model('Project', {
-  title: g.string().length({ min: 3 }),
-  description: g.string(),
-  image: g.url(),
-  liveSiteUrl: g.url(),
-  githubUrl: g.url(),
-  category: g.string().search(),
-  createdBy: g.relation(() => User),
-}).auth((rules) => {
-  rules.public().read()
-  rules.private().create().delete().update()
-})
+const pg = connector.Postgres('Postgres', {
+  url: gph.env('DATABASE_URL'),
+});
 
-const jwt = auth.JWT({
-  issuer: 'grafbase',
-  secret:  g.env('NEXT_AUTH_SECRET')
-})
+const project = gph.type('Project', {
+  title: gph.string().optional(),
+  description: scalar.string(),
+  image: scalar.url(),
+  liveSiteUrl: scalar.url(),
+  githubUrl: scalar.url(),
+  category: scalar.string(),
+});
 
-export default config({
-  schema: g,
-  auth: {
-    providers: [jwt],
-    rules: (rules) => rules.private()
-  },
-})
+const user = gph.type('User', {
+  name: scalar.string().optional(),
+  email: scalar.email(),
+  avatarUrl: scalar.url(),
+  description: scalar.string().optional(),
+  githubUrl: scalar.url().optional(),
+  linkedinUrl: scalar.url().optional(),
+  projects: gph.ref(project).list().optional(),
+});
+
+gph.datasource(pg);
