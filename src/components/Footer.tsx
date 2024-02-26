@@ -33,7 +33,7 @@ const Footer = () => {
           />
 
           <p className="text-start text-sm font-normal mt-5 max-w-xs">
-            Flexibble is the world's leading community form creatives to share, grow, and get gired.
+            Flexibble is the world`s leading community form creatives to share, grow, and get gired.
           </p>
         </div>
         <div className="flex flex-wrap gap-12">
