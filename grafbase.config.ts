@@ -1,4 +1,4 @@
-import { config, connector, graph, scalar } from '@grafbase/sdk'
+import { auth, config, connector, graph, scalar } from '@grafbase/sdk'
 
 const gph = graph.Standalone()
 
@@ -27,11 +27,17 @@ const user = gph.type('User', {
 
 gph.datasource(pg);
 
+const jwt = auth.JWT({
+  issuer: 'gragbase',
+  secret: gph.env('NEXT_AUTH_SECRET')
+});
+
 export default config({
   graph: gph,
   auth: {
+    providers: [jwt],
     rules: (rules) => {
-      rules.public()
+      rules.private()
     },
   },
 })
